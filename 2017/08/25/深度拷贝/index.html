@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JAVASCRIPT," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Object.assign() 方法用于将所有可枚举的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。">
+<meta name="keywords" content="JAVASCRIPT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Object.assign()深度拷贝">
+<meta property="og:url" content="http://yoursite.com/2017/08/25/深度拷贝/index.html">
+<meta property="og:site_name" content="Destiny">
+<meta property="og:description" content="Object.assign() 方法用于将所有可枚举的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。">
+<meta property="og:updated_time" content="2017-08-28T08:48:07.903Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Object.assign()深度拷贝">
+<meta name="twitter:description" content="Object.assign() 方法用于将所有可枚举的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/25/深度拷贝/"/>
+
+
+
+
+
+  <title>Object.assign()深度拷贝 | Destiny</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Destiny</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/25/深度拷贝/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FeverDestiny">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Destiny">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Object.assign()深度拷贝</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-25T15:43:07+08:00">
+                2017-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVASCRIPT/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVASCRIPT</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Object.assign() 方法用于将所有可枚举的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。<br><a id="more"></a></p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><div class="note info"><p>Object.assign(target, …sources) (md partial supported) </p></div>
+<p><strong>参数</strong><br>target:目标对象。<br>sources:(多个)源对象。<br><strong>返回值</strong><br>目标对象。</p>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>如果目标对象中的属性具有相同的键，则属性将被源中的属性覆盖。后来的源的属性将类似地覆盖早先的属性。</p>
+<p>Object.assign 方法只会拷贝源对象自身的并且可枚举的属性到目标对象身上。该方法使用源对象的 [ [ Get ] ] 和目标对象的 [ [ Set ] ]，所以它会调用相关 getter 和 setter。因此，它分配属性而不是复制或定义新的属性。如果合并源包含了 getter，那么该方法就不适合将新属性合并到原型里。假如是拷贝属性定义到原型里，包括它们的可枚举性，那么应该使用 Object.getOwnPropertyDescriptor() 和 Object.defineProperty() 。</p>
+<p>String类型和 Symbol 类型的属性都会被拷贝。</p>
+<p>注意，在属性拷贝过程中可能会产生异常，比如目标对象的某个只读属性和源对象的某个属性同名，这时该方法会抛出一个 TypeError 异常，拷贝过程中断，已经拷贝成功的属性不会受到影响，还未拷贝的属性将不会再被拷贝。</p>
+<p>注意， Object.assign 会跳过那些值为 null 或 undefined 的源对象。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="复制一个-object"><a href="#复制一个-object" class="headerlink" title="复制一个 object"></a>复制一个 object</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">a</span>: <span class="number">1</span> &#125;;</div><div class="line"><span class="keyword">var</span> copy = <span class="built_in">Object</span>.assign(&#123;&#125;, obj);</div><div class="line"><span class="built_in">console</span>.log(copy); <span class="comment">// &#123; a: 1 &#125;</span></div></pre></td></tr></table></figure>
+<h3 id="深度拷贝问题"><a href="#深度拷贝问题" class="headerlink" title="深度拷贝问题"></a>深度拷贝问题</h3><p>针对深度拷贝，需要使用其他方法，因为 Object.assign() 拷贝的是属性值。假如源对象的属性值是一个指向对象的引用，它也只拷贝那个引用值。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> a = &#123; <span class="attr">b</span>: &#123;<span class="attr">c</span>:<span class="number">4</span>&#125; , <span class="attr">d</span>: &#123; <span class="attr">e</span>: &#123;<span class="attr">f</span>:<span class="number">1</span>&#125;&#125; &#125;</div><div class="line">  <span class="keyword">let</span> g = <span class="built_in">Object</span>.assign(&#123;&#125;,a)</div><div class="line">  <span class="keyword">let</span> h = <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(a));</div><div class="line">  <span class="built_in">console</span>.log(g.d) <span class="comment">// &#123; e: &#123; f: 1 &#125; &#125;</span></div><div class="line">  g.d.e = <span class="number">32</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'g.d.e set to 32.'</span>) <span class="comment">// g.d.e set to 32.</span></div><div class="line">  <span class="built_in">console</span>.log(g) <span class="comment">// &#123; b: &#123; c: 4 &#125;, d: &#123; e: 32 &#125; &#125;</span></div><div class="line">  <span class="built_in">console</span>.log(a) <span class="comment">// &#123; b: &#123; c: 4 &#125;, d: &#123; e: 32 &#125; &#125;</span></div><div class="line">  <span class="built_in">console</span>.log(h) <span class="comment">// &#123; b: &#123; c: 4 &#125;, d: &#123; e: &#123; f: 1 &#125; &#125; &#125;</span></div><div class="line">  h.d.e = <span class="number">54</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'h.d.e set to 54.'</span>) <span class="comment">// h.d.e set to 54.</span></div><div class="line">  <span class="built_in">console</span>.log(g) <span class="comment">// &#123; b: &#123; c: 4 &#125;, d: &#123; e: 32 &#125; &#125;</span></div><div class="line">  <span class="built_in">console</span>.log(a) <span class="comment">// &#123; b: &#123; c: 4 &#125;, d: &#123; e: 32 &#125; &#125;</span></div><div class="line">  <span class="built_in">console</span>.log(h) <span class="comment">// &#123; b: &#123; c: 4 &#125;, d: &#123; e: 54 &#125; &#125;</span></div><div class="line">&#125;</div><div class="line">test();</div></pre></td></tr></table></figure></p>
+<h3 id="合并-objects"><a href="#合并-objects" class="headerlink" title="合并 objects"></a>合并 objects</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o1 = &#123; <span class="attr">a</span>: <span class="number">1</span> &#125;;</div><div class="line"><span class="keyword">var</span> o2 = &#123; <span class="attr">b</span>: <span class="number">2</span> &#125;;</div><div class="line"><span class="keyword">var</span> o3 = &#123; <span class="attr">c</span>: <span class="number">3</span> &#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> obj = <span class="built_in">Object</span>.assign(o1, o2, o3);</div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">// &#123; a: 1, b: 2, c: 3 &#125;</span></div><div class="line"><span class="built_in">console</span>.log(o1);  <span class="comment">// &#123; a: 1, b: 2, c: 3 &#125;, 注意目标对象自身也会改变。</span></div></pre></td></tr></table></figure>
+<h3 id="拷贝-symbol-类型的属性"><a href="#拷贝-symbol-类型的属性" class="headerlink" title="拷贝 symbol 类型的属性"></a>拷贝 symbol 类型的属性</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o1 = &#123; <span class="attr">a</span>: <span class="number">1</span> &#125;;</div><div class="line"><span class="keyword">var</span> o2 = &#123; [<span class="built_in">Symbol</span>(<span class="string">"foo"</span>)]: <span class="number">2</span> &#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> obj = <span class="built_in">Object</span>.assign(&#123;&#125;, o1, o2);</div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">// &#123; a: 1, [Symbol("foo")]: 2 &#125;</span></div></pre></td></tr></table></figure>
+<h3 id="继承属性和不可枚举属性是不能拷贝的"><a href="#继承属性和不可枚举属性是不能拷贝的" class="headerlink" title="继承属性和不可枚举属性是不能拷贝的"></a>继承属性和不可枚举属性是不能拷贝的</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = <span class="built_in">Object</span>.create(&#123;<span class="attr">foo</span>: <span class="number">1</span>&#125;, &#123; <span class="comment">// foo 是个继承属性。</span></div><div class="line">    bar: &#123;</div><div class="line">        <span class="attr">value</span>: <span class="number">2</span>  <span class="comment">// bar 是个不可枚举属性。</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">baz</span>: &#123;</div><div class="line">        <span class="attr">value</span>: <span class="number">3</span>,</div><div class="line">        <span class="attr">enumerable</span>: <span class="literal">true</span>  <span class="comment">// baz 是个自身可枚举属性。</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="keyword">var</span> copy = <span class="built_in">Object</span>.assign(&#123;&#125;, obj);</div><div class="line"><span class="built_in">console</span>.log(copy); <span class="comment">// &#123; baz: 3 &#125;</span></div></pre></td></tr></table></figure>
+<h3 id="原始类型会被包装为-object"><a href="#原始类型会被包装为-object" class="headerlink" title="原始类型会被包装为 object"></a>原始类型会被包装为 object</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> v1 = <span class="string">"abc"</span>;</div><div class="line"><span class="keyword">var</span> v2 = <span class="literal">true</span>;</div><div class="line"><span class="keyword">var</span> v3 = <span class="number">10</span>;</div><div class="line"><span class="keyword">var</span> v4 = <span class="built_in">Symbol</span>(<span class="string">"foo"</span>)</div><div class="line"></div><div class="line"><span class="keyword">var</span> obj = <span class="built_in">Object</span>.assign(&#123;&#125;, v1, <span class="literal">null</span>, v2, <span class="literal">undefined</span>, v3, v4); </div><div class="line"><span class="comment">// 原始类型会被包装，null 和 undefined 会被忽略。</span></div><div class="line"><span class="comment">// 注意，只有字符串的包装对象才可能有自身可枚举属性。</span></div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">// &#123; "0": "a", "1": "b", "2": "c" &#125;</span></div></pre></td></tr></table></figure>
+<h3 id="异常会打断接下来的拷贝任务"><a href="#异常会打断接下来的拷贝任务" class="headerlink" title="异常会打断接下来的拷贝任务"></a>异常会打断接下来的拷贝任务</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> target = <span class="built_in">Object</span>.defineProperty(&#123;&#125;, <span class="string">"foo"</span>, &#123;</div><div class="line">    <span class="attr">value</span>: <span class="number">1</span>,</div><div class="line">    <span class="attr">writable</span>: <span class="literal">false</span></div><div class="line">&#125;); <span class="comment">// target 的 foo 属性是个只读属性。</span></div><div class="line"></div><div class="line"><span class="built_in">Object</span>.assign(target, &#123;<span class="attr">bar</span>: <span class="number">2</span>&#125;, &#123;<span class="attr">foo2</span>: <span class="number">3</span>, <span class="attr">foo</span>: <span class="number">3</span>, <span class="attr">foo3</span>: <span class="number">3</span>&#125;, &#123;<span class="attr">baz</span>: <span class="number">4</span>&#125;);</div><div class="line"><span class="comment">// TypeError: "foo" is read-only</span></div><div class="line"><span class="comment">// 注意这个异常是在拷贝第二个源对象的第二个属性时发生的。</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(target.bar);  <span class="comment">// 2，说明第一个源对象拷贝成功了。</span></div><div class="line"><span class="built_in">console</span>.log(target.foo2); <span class="comment">// 3，说明第二个源对象的第一个属性也拷贝成功了。</span></div><div class="line"><span class="built_in">console</span>.log(target.foo);  <span class="comment">// 1，只读属性不能被覆盖，所以第二个源对象的第二个属性拷贝失败了。</span></div><div class="line"><span class="built_in">console</span>.log(target.foo3); <span class="comment">// undefined，异常之后 assign 方法就退出了，第三个属性是不会被拷贝到的。</span></div><div class="line"><span class="built_in">console</span>.log(target.baz);  <span class="comment">// undefined，第三个源对象更是不会被拷贝到的。</span></div></pre></td></tr></table></figure>
+<h3 id="拷贝访问器（accessor）"><a href="#拷贝访问器（accessor）" class="headerlink" title="拷贝访问器（accessor）"></a>拷贝访问器（accessor）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">foo</span>: <span class="number">1</span>,</div><div class="line">  get bar() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">2</span>;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> copy = <span class="built_in">Object</span>.assign(&#123;&#125;, obj); </div><div class="line"><span class="comment">// &#123; foo: 1, bar: 2 &#125;</span></div><div class="line"><span class="comment">// copy.bar的值来自obj.bar的getter函数的返回值 </span></div><div class="line"><span class="built_in">console</span>.log(copy); </div><div class="line"></div><div class="line"><span class="comment">// 下面这个函数会拷贝所有自有属性的属性描述符</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">completeAssign</span>(<span class="params">target, ...sources</span>) </span>&#123;</div><div class="line">  sources.forEach(<span class="function"><span class="params">source</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> descriptors = <span class="built_in">Object</span>.keys(source).reduce(<span class="function">(<span class="params">descriptors, key</span>) =&gt;</span> &#123;</div><div class="line">      descriptors[key] = <span class="built_in">Object</span>.getOwnPropertyDescriptor(source, key);</div><div class="line">      <span class="keyword">return</span> descriptors;</div><div class="line">    &#125;, &#123;&#125;);</div><div class="line"></div><div class="line">    <span class="comment">// Object.assign 默认也会拷贝可枚举的Symbols</span></div><div class="line">    <span class="built_in">Object</span>.getOwnPropertySymbols(source).forEach(<span class="function"><span class="params">sym</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">let</span> descriptor = <span class="built_in">Object</span>.getOwnPropertyDescriptor(source, sym);</div><div class="line">      <span class="keyword">if</span> (descriptor.enumerable) &#123;</div><div class="line">        descriptors[sym] = descriptor;</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">    <span class="built_in">Object</span>.defineProperties(target, descriptors);</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> target;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> copy = completeAssign(&#123;&#125;, obj);</div><div class="line"><span class="comment">// &#123; foo:1, get bar() &#123; return 2 &#125; &#125;</span></div><div class="line"><span class="built_in">console</span>.log(copy);</div></pre></td></tr></table></figure>
+<h2 id="浏览器兼容性"><a href="#浏览器兼容性" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">Feature</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Firefox (Gecko)</th>
+<th style="text-align:center">Internet Explorer</th>
+<th style="text-align:center">Opera</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">Edge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Basic support</td>
+<td style="text-align:center">45+</td>
+<td style="text-align:center">34 (34)+</td>
+<td style="text-align:center">未实现</td>
+<td style="text-align:center">32+</td>
+<td style="text-align:center">9+</td>
+<td style="text-align:center">(Yes)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank" rel="external">Object.assign()</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JAVASCRIPT/" rel="tag"># JAVASCRIPT</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/24/HEXO命令/" rel="next" title="HEXO命令">
+                <i class="fa fa-chevron-left"></i> HEXO命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/28/JavaScript遍历树形结构/" rel="prev" title="JavaScript遍历树形结构">
+                JavaScript遍历树形结构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="FeverDestiny" />
+          <p class="site-author-name" itemprop="name">FeverDestiny</p>
+           
+              <p class="site-description motion-element" itemprop="description">vue、react、angular、sql、android</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives">
+            
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述"><span class="nav-number">2.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">3.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#复制一个-object"><span class="nav-number">3.1.</span> <span class="nav-text">复制一个 object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深度拷贝问题"><span class="nav-number">3.2.</span> <span class="nav-text">深度拷贝问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并-objects"><span class="nav-number">3.3.</span> <span class="nav-text">合并 objects</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拷贝-symbol-类型的属性"><span class="nav-number">3.4.</span> <span class="nav-text">拷贝 symbol 类型的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承属性和不可枚举属性是不能拷贝的"><span class="nav-number">3.5.</span> <span class="nav-text">继承属性和不可枚举属性是不能拷贝的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原始类型会被包装为-object"><span class="nav-number">3.6.</span> <span class="nav-text">原始类型会被包装为 object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常会打断接下来的拷贝任务"><span class="nav-number">3.7.</span> <span class="nav-text">异常会打断接下来的拷贝任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拷贝访问器（accessor）"><span class="nav-number">3.8.</span> <span class="nav-text">拷贝访问器（accessor）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器兼容性"><span class="nav-number">4.</span> <span class="nav-text">浏览器兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 &mdash; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FeverDestiny</span>
+
+  
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

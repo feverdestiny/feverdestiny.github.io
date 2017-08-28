@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JAVASCRIPT," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在 JavaScript 中也很多树形结构。比如 DOM 树，省市区地址联动，文件目录等； JSON 本身就是树形结构。很多前端面试题也跟树形结构的有关，比如在浏览器端写遍历 DOM 树的函数，比如在 nodejs 运行时遍历文件目录等。">
+<meta name="keywords" content="JAVASCRIPT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript遍历树形结构">
+<meta property="og:url" content="http://yoursite.com/2017/08/28/JavaScript遍历树形结构/index.html">
+<meta property="og:site_name" content="Destiny">
+<meta property="og:description" content="在 JavaScript 中也很多树形结构。比如 DOM 树，省市区地址联动，文件目录等； JSON 本身就是树形结构。很多前端面试题也跟树形结构的有关，比如在浏览器端写遍历 DOM 树的函数，比如在 nodejs 运行时遍历文件目录等。">
+<meta property="og:updated_time" content="2017-08-28T08:51:57.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript遍历树形结构">
+<meta name="twitter:description" content="在 JavaScript 中也很多树形结构。比如 DOM 树，省市区地址联动，文件目录等； JSON 本身就是树形结构。很多前端面试题也跟树形结构的有关，比如在浏览器端写遍历 DOM 树的函数，比如在 nodejs 运行时遍历文件目录等。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/28/JavaScript遍历树形结构/"/>
+
+
+
+
+
+  <title>JavaScript遍历树形结构 | Destiny</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Destiny</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/28/JavaScript遍历树形结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="FeverDestiny">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Destiny">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaScript遍历树形结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-28T16:39:02+08:00">
+                2017-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVASCRIPT/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVASCRIPT</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在 JavaScript 中也很多树形结构。比如 DOM 树，省市区地址联动，文件目录等； JSON 本身就是树形结构。<br>很多前端面试题也跟树形结构的有关，比如在浏览器端写遍历 DOM 树的函数，比如在 nodejs 运行时遍历文件目录等。<br><a id="more"></a></p>
+<p>这里演示用 JavaScript 遍历树形结构的几种策略。</p>
+<h2 id="场景1：遍历-DOM-树"><a href="#场景1：遍历-DOM-树" class="headerlink" title="场景1：遍历 DOM 树"></a>场景1：遍历 DOM 树</h2><h3 id="方案1：递归模式"><a href="#方案1：递归模式" class="headerlink" title="方案1：递归模式"></a>方案1：递归模式</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">walkDom</span>(<span class="params">node, callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123; <span class="comment">//判断node是否为null</span></div><div class="line">        <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">    callback(node) <span class="comment">//将node自身传入callback</span></div><div class="line">    node = node.firstElementChild <span class="comment">//改变node为其子元素节点</span></div><div class="line">    <span class="keyword">while</span> (node) &#123;</div><div class="line">        walkDom(node, callback) <span class="comment">//如果存在子元素，则递归调用walkDom</span></div><div class="line">        node = node.nextElementSibling <span class="comment">//从头到尾遍历元素节点</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">walkDom(<span class="built_in">document</span>, <span class="function"><span class="keyword">function</span>(<span class="params">node</span>) </span>&#123;<span class="built_in">console</span>.count()&#125;) <span class="comment">//包含document节点</span></div><div class="line"><span class="built_in">document</span>.querySelectorAll(<span class="string">'*'</span>).length <span class="comment">//数量比上面输出的少1，因为不包含document节点</span></div></pre></td></tr></table></figure>
+<p>将上述代码黏贴到任意页面的控制台 console 中执行。</p>
+<h3 id="方案2：循环模式"><a href="#方案2：循环模式" class="headerlink" title="方案2：循环模式"></a>方案2：循环模式</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">walkDom</span>(<span class="params">node, callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> stack = [node] <span class="comment">//存入数组</span></div><div class="line">    <span class="keyword">var</span> target</div><div class="line">    <span class="keyword">while</span>(stack.length) &#123; <span class="comment">//数组长度不为0，继续循环</span></div><div class="line">        target = stack.shift() <span class="comment">//取出元素</span></div><div class="line">        callback(target) <span class="comment">//传入callback</span></div><div class="line">        <span class="built_in">Array</span>.prototype.push.apply(stack, target.children) <span class="comment">//将其子元素一股脑推入stack，增加长度</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">walkDom(<span class="built_in">document</span>, <span class="function"><span class="keyword">function</span>(<span class="params">node</span>) </span>&#123;<span class="built_in">console</span>.count()&#125;) <span class="comment">//包含document节点</span></div><div class="line"><span class="built_in">document</span>.querySelectorAll(<span class="string">'*'</span>).length <span class="comment">//数量比上面输出的少1，因为不包含document节点</span></div></pre></td></tr></table></figure>
+<p>在循环模式中，shift方法可以换成pop，从尾部取出元素；push方法可以换成unshift从头部添加元素。不同的顺序，影响了是「广度优先」还是「深度优先」。</p>
+<h2 id="场景2：在-nodejs-运行时里遍历文件目录"><a href="#场景2：在-nodejs-运行时里遍历文件目录" class="headerlink" title="场景2：在 nodejs 运行时里遍历文件目录"></a>场景2：在 nodejs 运行时里遍历文件目录</h2><h3 id="子场景1：同步模式"><a href="#子场景1：同步模式" class="headerlink" title="子场景1：同步模式"></a>子场景1：同步模式</h3><h4 id="方案1：递归"><a href="#方案1：递归" class="headerlink" title="方案1：递归"></a>方案1：递归</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"><span class="keyword">var</span> Path = <span class="built_in">require</span>(<span class="string">'path'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">readdirs</span>(<span class="params">path</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> result = &#123; <span class="comment">//构造文件夹数据</span></div><div class="line">        path: path,</div><div class="line">        <span class="attr">name</span>: Path.basename(path),</div><div class="line">        <span class="attr">type</span>: <span class="string">'directory'</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> files = fs.readdirSync(path) <span class="comment">//拿到文件目录下的所有文件名</span></div><div class="line">    result.children = files.map(<span class="function"><span class="keyword">function</span>(<span class="params">file</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> subPath = Path.resolve(path, file) <span class="comment">//拼接为绝对路径</span></div><div class="line">        <span class="keyword">var</span> stats = fs.statSync(subPath) <span class="comment">//拿到文件信息对象</span></div><div class="line">        <span class="keyword">if</span> (stats.isDirectory()) &#123; <span class="comment">//判断是否为文件夹类型</span></div><div class="line">            <span class="keyword">return</span> readdirs(subPath) <span class="comment">//递归读取文件夹</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> &#123; <span class="comment">//构造文件数据</span></div><div class="line">            path: subPath,</div><div class="line">            <span class="attr">name</span>: file,</div><div class="line">            <span class="attr">type</span>: <span class="string">'file'</span></div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">return</span> result <span class="comment">//返回数据</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> cwd = process.cwd()</div><div class="line"><span class="keyword">var</span> tree = readdirs(cwd)</div><div class="line">fs.writeFileSync(Path.join(cwd, <span class="string">'tree.json'</span>), <span class="built_in">JSON</span>.stringify(tree)) <span class="comment">//保存在tree.json中，去查看吧</span></div></pre></td></tr></table></figure>
+<p>将上面的代码保存在 tree.js 中，然后在当前文件夹打开命令行，输入node tree.js，目录信息保存在生成tree.json文件中。</p>
+<h4 id="方案2：循环"><a href="#方案2：循环" class="headerlink" title="方案2：循环"></a>方案2：循环</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"><span class="keyword">var</span> Path = <span class="built_in">require</span>(<span class="string">'path'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">readdirs</span>(<span class="params">path</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> result = &#123; <span class="comment">//构造文件夹数据</span></div><div class="line">        path: path,</div><div class="line">        <span class="attr">name</span>: Path.basename(path),</div><div class="line">        <span class="attr">type</span>: <span class="string">'directory'</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> stack = [result] <span class="comment">//生成一个栈数组</span></div><div class="line">    <span class="keyword">while</span> (stack.length) &#123; <span class="comment">//如果数组不为空，读取children</span></div><div class="line">        <span class="keyword">var</span> target = stack.pop() <span class="comment">//取出文件夹对象</span></div><div class="line">        <span class="keyword">var</span> files = fs.readdirSync(target.path) <span class="comment">//拿到文件名数组</span></div><div class="line">        target.children = files.map(<span class="function"><span class="keyword">function</span>(<span class="params">file</span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> subPath = Path.resolve(target.path, file) <span class="comment">//转化为绝对路径</span></div><div class="line">            <span class="keyword">var</span> stats = fs.statSync(subPath) <span class="comment">//拿到文件信息对象</span></div><div class="line">            <span class="keyword">var</span> model = &#123; <span class="comment">//构造文件数据结构</span></div><div class="line">                path: subPath,</div><div class="line">                <span class="attr">name</span>: file,</div><div class="line">                <span class="attr">type</span>: stats.isDirectory() ? <span class="string">'directory'</span> : <span class="string">'file'</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (model.type === <span class="string">'directory'</span>) &#123;</div><div class="line">                stack.push(model) <span class="comment">//如果是文件夹，推入栈</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> model <span class="comment">//返回数据模型</span></div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result <span class="comment">//返回整个数据结果</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> cwd = process.cwd()</div><div class="line"><span class="keyword">var</span> tree = readdirs(cwd)</div><div class="line">fs.writeFileSync(Path.join(cwd, <span class="string">'tree.json'</span>), <span class="built_in">JSON</span>.stringify(tree)) <span class="comment">//保存在tree.json中，去查看吧</span></div></pre></td></tr></table></figure>
+<p>循环策略中的pop跟shift，push跟unshift也可以互换以调整优先级，甚至用可以用splice方法更精细的控制stack数组。循环模式比递归模式更可控。</p>
+<h3 id="子场景2：异步模式"><a href="#子场景2：异步模式" class="headerlink" title="子场景2：异步模式"></a>子场景2：异步模式</h3><h4 id="方案1：过程式-Promise"><a href="#方案1：过程式-Promise" class="headerlink" title="方案1：过程式 Promise"></a>方案1：过程式 Promise</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"><span class="keyword">var</span> Path = <span class="built_in">require</span>(<span class="string">'path'</span>)</div><div class="line"><span class="comment">//promise包装的fs.stat方法</span></div><div class="line"><span class="keyword">var</span> stat = <span class="function"><span class="keyword">function</span>(<span class="params">path</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">        fs.stat(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, stats</span>) </span>&#123;</div><div class="line">            err ? reject(err) : resolve(stats)</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="comment">//promise包装的fs.readdir方法</span></div><div class="line"><span class="keyword">var</span> readdir = <span class="function"><span class="keyword">function</span>(<span class="params">path</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">        fs.readdir(path, <span class="function"><span class="keyword">function</span>(<span class="params">err, files</span>) </span>&#123;</div><div class="line">            err ? reject(err) : resolve(files)</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="comment">//promise包装的fs.writeFile</span></div><div class="line"><span class="keyword">var</span> writeFile = <span class="function"><span class="keyword">function</span>(<span class="params">path, data</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">        fs.writeFile(path, <span class="built_in">JSON</span>.stringify(data || <span class="string">''</span>), <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</div><div class="line">            err ? reject(err) : resolve</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">readdirs</span>(<span class="params">path</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> readdir(path) <span class="comment">//异步读取文件夹</span></div><div class="line">    .then(<span class="function"><span class="keyword">function</span>(<span class="params">files</span>) </span>&#123; <span class="comment">//拿到文件名列表</span></div><div class="line">        <span class="keyword">var</span> promiseList = files.map(<span class="function"><span class="keyword">function</span>(<span class="params">file</span>) </span>&#123; <span class="comment">//遍历列表</span></div><div class="line">            <span class="keyword">var</span> subPath = Path.resolve(path, file) <span class="comment">//拼接为绝对路径</span></div><div class="line">            <span class="keyword">return</span> stat(subPath) <span class="comment">//异步读取文件信息</span></div><div class="line">            .then(<span class="function"><span class="keyword">function</span>(<span class="params">stats</span>) </span>&#123; <span class="comment">//拿到文件信息</span></div><div class="line">                <span class="comment">//是文件夹类型的，继续读取目录，否则返回数据</span></div><div class="line">                <span class="keyword">return</span> stats.isDirectory() ?</div><div class="line">                readdirs(subPath) : &#123;</div><div class="line">                    <span class="attr">path</span>: subPath,</div><div class="line">                    <span class="attr">name</span>: file,</div><div class="line">                    <span class="attr">type</span>: <span class="string">'file'</span></div><div class="line">                &#125;</div><div class="line">            &#125;)</div><div class="line">        &#125;)</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.all(promiseList) <span class="comment">//等待所有promise完成</span></div><div class="line">    &#125;)</div><div class="line">    .then(<span class="function"><span class="keyword">function</span>(<span class="params">children</span>) </span>&#123; <span class="comment">//拿到包含所有数据的children数组</span></div><div class="line">        <span class="keyword">return</span> &#123; <span class="comment">//返回结果</span></div><div class="line">            path: path,</div><div class="line">            <span class="attr">name</span>: Path.basename(path),</div><div class="line">            <span class="attr">type</span>: <span class="string">'directory'</span>,</div><div class="line">            <span class="attr">children</span>: children</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> cwd = process.cwd()</div><div class="line"></div><div class="line">readdirs(cwd)</div><div class="line">.then(writeFile.bind(<span class="literal">null</span>, Path.join(cwd, <span class="string">'tree.json'</span>))) <span class="comment">//保存在tree.json中，去查看吧</span></div><div class="line">.catch(<span class="built_in">console</span>.error.bind(<span class="built_in">console</span>)) <span class="comment">//出错了就输出错误日志查看原因</span></div></pre></td></tr></table></figure>
+<p>上面的函数都能工作，但都是一个个function的调用，显得太「过程式」；</p>
+<p>能不能用面向对象的方式来写呢？</p>
+<p>当然可以。</p>
+<p>其实面向对象的写法，更清晰。</p>
+<p>为了更加语义化，以及增显逼格。</p>
+<p>我们用 ES6 的 class 来写这个树形结构类。</p>
+<h4 id="方案2：ES6-class-ES6-Promise"><a href="#方案2：ES6-class-ES6-Promise" class="headerlink" title="方案2：ES6-class + ES6-Promise"></a>方案2：ES6-class + ES6-Promise</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> fs <span class="keyword">from</span> <span class="string">'fs'</span></div><div class="line"><span class="keyword">import</span> &#123;join, resolve, isAbsolute, basename, extname, dirname, sep&#125; <span class="keyword">from</span> <span class="string">'path'</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 获取目录下的所有文件</div><div class="line"> * @param &#123;string&#125; path</div><div class="line"> * @return &#123;promise&#125; resolve files || reject error</div><div class="line"> */</div><div class="line"><span class="keyword">let</span> readdir = <span class="function">(<span class="params">path</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">        fs.readdir(path, (err, files) =&gt; &#123;</div><div class="line">            err ? reject(err) : resolve(files)</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">* 将data写入文件</div><div class="line">* @param &#123;string&#125; path 路径</div><div class="line">* @param &#123;data&#125; data</div><div class="line">* @return &#123;promise&#125; resolve path || reject error</div><div class="line">*/</div><div class="line"><span class="keyword">let</span> writeFile = <span class="function">(<span class="params">path, data</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">        fs.writeFile(path, data, (err) =&gt; &#123;</div><div class="line">            err ? reject(err) : resolve(path)</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">* 获取文件属性</div><div class="line">* @param &#123;string&#125; path</div><div class="line">* @return &#123;promise&#125; resolve stats || reject error</div><div class="line">*/</div><div class="line"><span class="keyword">let</span> stat = <span class="function">(<span class="params">path</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">        fs.stat(path, (err, stats) =&gt; &#123;</div><div class="line">            err ? reject(err) : resolve(stats)</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">* 判断path是否存在</div><div class="line">* @param &#123;string&#125; path 路径</div><div class="line">* @return &#123;promise&#125; resolve exists</div><div class="line">*/</div><div class="line"><span class="keyword">let</span> exists = <span class="function">(<span class="params">path</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> fs.exists(path, resolve))</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//文档类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>(path) &#123;</div><div class="line">        <span class="keyword">this</span>.path = path</div><div class="line">        <span class="keyword">this</span>.name = basename(path)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//存在性判断</span></div><div class="line">    exists() &#123;</div><div class="line">        <span class="keyword">return</span> exists(<span class="keyword">this</span>.path)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//异步获取文件信息</span></div><div class="line">    stat() &#123;</div><div class="line">        <span class="keyword">return</span> stat(<span class="keyword">this</span>.path)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//输出基本数据</span></div><div class="line">    json() &#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(<span class="keyword">this</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//将基本数据保存在path路径的文件中</span></div><div class="line">    saveTo(path) &#123;</div><div class="line">        <span class="keyword">if</span> (isAbsolute(path)) &#123;</div><div class="line">            <span class="keyword">return</span> writeFile(path, <span class="keyword">this</span>.json())</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> writeFile(resolve(<span class="keyword">this</span>.path, path), <span class="keyword">this</span>.json())</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//文件类，继承自文档类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">File</span> <span class="keyword">extends</span> <span class="title">Document</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>(path) &#123;</div><div class="line">        <span class="keyword">super</span>(path) <span class="comment">//必须先调用超类构造方法</span></div><div class="line">        <span class="keyword">this</span>.type = <span class="string">'file'</span> <span class="comment">//type 为 file</span></div><div class="line">        <span class="keyword">this</span>.extname = extname(path) <span class="comment">//新增扩展名</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//写入数据</span></div><div class="line">    write(data = <span class="string">''</span>) &#123;</div><div class="line">        <span class="keyword">return</span> writeFile(<span class="keyword">this</span>.path, data)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//其他文件特有方法如 read unlink 等</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//文件夹类，继承自文档类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Directory</span> <span class="keyword">extends</span> <span class="title">Document</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>(path) &#123;</div><div class="line">        <span class="keyword">super</span>(path) <span class="comment">//必须先调用超类构造方法</span></div><div class="line">        <span class="keyword">this</span>.type = <span class="string">'directory'</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//读取当前文件夹</span></div><div class="line">    readdir() &#123;</div><div class="line">        <span class="keyword">return</span> readdir(<span class="keyword">this</span>.path) <span class="comment">//读取目录</span></div><div class="line">        .then(<span class="function">(<span class="params">files</span>) =&gt;</span> &#123; <span class="comment">//拿到文件名列表</span></div><div class="line">            <span class="keyword">let</span> promiseList = files.map(<span class="function">(<span class="params">file</span>) =&gt;</span> &#123;</div><div class="line">                <span class="keyword">let</span> subPath = resolve(<span class="keyword">this</span>.path, file) <span class="comment">//拼接为绝对路径</span></div><div class="line">                <span class="keyword">return</span> stat(subPath) <span class="comment">//获取文件信息</span></div><div class="line">                .then(<span class="function">(<span class="params">stats</span>) =&gt;</span> &#123;</div><div class="line">                    <span class="comment">//根据文件信息，归类为Directory或File类型</span></div><div class="line">                    <span class="keyword">return</span> stats.isDirectory() ?</div><div class="line">                    <span class="keyword">new</span> Directory(subPath) :</div><div class="line">                    <span class="keyword">new</span> File(subPath)</div><div class="line">                &#125;)</div><div class="line">            &#125;)</div><div class="line">            <span class="keyword">return</span> <span class="built_in">Promise</span>.all(promiseList)</div><div class="line">        &#125;)</div><div class="line">        .then(<span class="function">(<span class="params">children</span>) =&gt;</span> &#123; <span class="comment">//拿到children数组</span></div><div class="line">            <span class="keyword">this</span>.children = children <span class="comment">//保存children属性</span></div><div class="line">            <span class="keyword">return</span> children <span class="comment">//返回children</span></div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//深度读取文件目录</span></div><div class="line">    readdirs() &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.readdir() <span class="comment">//读取当前文件夹</span></div><div class="line">        .then(<span class="function">(<span class="params">children</span>) =&gt;</span> &#123; <span class="comment">//拿到children</span></div><div class="line">            <span class="keyword">let</span> promiseList = []</div><div class="line">            children.map(<span class="function">(<span class="params">child</span>) =&gt;</span> &#123;</div><div class="line">                <span class="keyword">if</span> (child <span class="keyword">instanceof</span> Directory) &#123; <span class="comment">//是文件夹实例，继续深度读取文件目录</span></div><div class="line">                    promiseList.push(child.readdirs())</div><div class="line">                &#125;</div><div class="line">            &#125;)</div><div class="line">            <span class="keyword">return</span> <span class="built_in">Promise</span>.all(promiseList) <span class="comment">//等待所有子元素深度读取目录完毕</span></div><div class="line">        &#125;)</div><div class="line">        .then(<span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">this</span>) <span class="comment">//返回this</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//其他文件夹特有方法如 addFile removeFile addDir remveDir 等</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> cwd = process.cwd()</div><div class="line"></div><div class="line"><span class="keyword">new</span> Directory(cwd)</div><div class="line">.readdirs()</div><div class="line">.then(<span class="function">(<span class="params">tree</span>) =&gt;</span> &#123;</div><div class="line">    tree.saveTo(<span class="string">'tree.json'</span>) <span class="comment">//让它自己保存在tree.json里</span></div><div class="line">&#125;)</div><div class="line">.catch(<span class="built_in">console</span>.error.bind(<span class="built_in">console</span>)) <span class="comment">//输出错误日志</span></div></pre></td></tr></table></figure>
+<p>为当前 JavaScript 引擎对 ES6 的支持度还不够，所以上述代码不能直接运行。可以通过以下两种方式来验证代码能不能跑起来。</p>
+<p>第一种，先 npm install -g bable 全局安装 babel 工具，再以 babel-node tree.js的方式取代 node tree.js 来运行上述代码。</p>
+<p>第二种，将上述代码黏贴到 <a href="https://babeljs.io/repl/，拿到编译为" target="_blank" rel="external">https://babeljs.io/repl/，拿到编译为</a> ES5 的代码，将代码保存在 tree.js 文件中，以 ES5 的形式执行。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JAVASCRIPT/" rel="tag"># JAVASCRIPT</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/25/深度拷贝/" rel="next" title="Object.assign()深度拷贝">
+                <i class="fa fa-chevron-left"></i> Object.assign()深度拷贝
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="FeverDestiny" />
+          <p class="site-author-name" itemprop="name">FeverDestiny</p>
+           
+              <p class="site-description motion-element" itemprop="description">vue、react、angular、sql、android</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives">
+            
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#场景1：遍历-DOM-树"><span class="nav-number">1.</span> <span class="nav-text">场景1：遍历 DOM 树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方案1：递归模式"><span class="nav-number">1.1.</span> <span class="nav-text">方案1：递归模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方案2：循环模式"><span class="nav-number">1.2.</span> <span class="nav-text">方案2：循环模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#场景2：在-nodejs-运行时里遍历文件目录"><span class="nav-number">2.</span> <span class="nav-text">场景2：在 nodejs 运行时里遍历文件目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子场景1：同步模式"><span class="nav-number">2.1.</span> <span class="nav-text">子场景1：同步模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方案1：递归"><span class="nav-number">2.1.1.</span> <span class="nav-text">方案1：递归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方案2：循环"><span class="nav-number">2.1.2.</span> <span class="nav-text">方案2：循环</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子场景2：异步模式"><span class="nav-number">2.2.</span> <span class="nav-text">子场景2：异步模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方案1：过程式-Promise"><span class="nav-number">2.2.1.</span> <span class="nav-text">方案1：过程式 Promise</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方案2：ES6-class-ES6-Promise"><span class="nav-number">2.2.2.</span> <span class="nav-text">方案2：ES6-class + ES6-Promise</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 &mdash; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">FeverDestiny</span>
+
+  
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
