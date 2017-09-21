@@ -102,7 +102,7 @@
 <meta property="og:url" content="http://feverdestiny.com/2017/08/25/深度拷贝/index.html">
 <meta property="og:site_name" content="Destiny">
 <meta property="og:description" content="Object.assign() 方法用于将所有可枚举的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。">
-<meta property="og:updated_time" content="2017-08-28T08:48:07.903Z">
+<meta property="og:updated_time" content="2017-09-21T05:20:23.304Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Object.assign()深度拷贝">
 <meta name="twitter:description" content="Object.assign() 方法用于将所有可枚举的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。">
@@ -348,7 +348,7 @@
 
       
         <p>Object.assign() 方法用于将所有可枚举的属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。<br><a id="more"></a></p>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><div class="note info"><p>Object.assign(target, …sources) (md partial supported) </p></div>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><div class="note info"><p>Object.assign(target, …sources)  </p></div>
 <p><strong>参数</strong><br>target:目标对象。<br>sources:(多个)源对象。<br><strong>返回值</strong><br>目标对象。</p>
 <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>如果目标对象中的属性具有相同的键，则属性将被源中的属性覆盖。后来的源的属性将类似地覆盖早先的属性。</p>
 <p>Object.assign 方法只会拷贝源对象自身的并且可枚举的属性到目标对象身上。该方法使用源对象的 [ [ Get ] ] 和目标对象的 [ [ Set ] ]，所以它会调用相关 getter 和 setter。因此，它分配属性而不是复制或定义新的属性。如果合并源包含了 getter，那么该方法就不适合将新属性合并到原型里。假如是拷贝属性定义到原型里，包括它们的可枚举性，那么应该使用 Object.getOwnPropertyDescriptor() 和 Object.defineProperty() 。</p>
@@ -509,7 +509,7 @@
             
               <a href="/archives">
             
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -594,6 +594,7 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">FeverDestiny</span>
+  <span>滇ICP备16009099号</span>
 
   
 </div>
@@ -731,6 +732,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 
